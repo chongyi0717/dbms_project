@@ -1,14 +1,16 @@
 from cProfile import label
+import encodings
 from tkinter import *
 from tkinter.ttk import *
 from turtle import st
-
+from functools import partial
 from soupsieve import select
-
+import pandas as pd
+import csv
 class My_Tk():
     def __init__(self,sql):
         self.tk=Tk()
-        self.tk.geometry('620x500+500+100')
+        self.tk.geometry('620x600+500+100')
         self.orm={}
         self.sql=sql
         self.create()
@@ -35,6 +37,12 @@ class My_Tk():
         self.display_label=Label(self.tk, text="")
         self.display_label.pack() 
         Button(self.tk,text='執行',command=self.run).pack()
+        Button(self.tk,text='顯示所有學生',command=partial(self.insert_tv,"select * from student")).pack()
+        Button(self.tk,text='顯示所有老師',command=partial(self.insert_tv,"select * from teacher")).pack()
+        Button(self.tk,text='顯示所有課室',command=partial(self.insert_tv,"select * from class")).pack()
+        Button(self.tk,text='顯示所有社團',command=partial(self.insert_tv,"select * from club")).pack()
+        Button(self.tk,text='顯示所有已借出的書',command=partial(self.insert_tv,"select * from book")).pack()
+
     def comfirm(self):
         self.entry.delete(0,END)
         if(self.combo.get()=="INSERT"):
@@ -45,13 +53,17 @@ class My_Tk():
             self.entry.insert(0,"update (table) set () where (condition)")
         elif(self.combo.get()=="DELETE"):
             self.entry.insert(0,"delete from (table) where (condition)")
+            
     def run(self):
         self.display_label.config(text=self.entry.get())
         if(self.combo.get()=="SELECT-FROM-WHERE"):
             self.insert_tv(self.entry.get())  
         else:
-            self.sql.input_commend(self.entry.get())
-            
+            try:
+              self.sql.input_commend(self.entry.get())
+            except:
+              self.display_label.config(text="發生錯誤！")
+
         
     def insert_tv(self,instruction):
             #清空tree、checkbutton
@@ -63,6 +75,7 @@ class My_Tk():
         #重设tree、button对应关系
         self.orm={}
         list = self.sql.show(instruction)
+        
         for i in range(len(list)):
             self.tv.insert('', i, value=list[i],tags=('oddrow'))#item默认状态tags
         #更新canvas的高度
@@ -124,10 +137,78 @@ if __name__=="__main__":
   sql=sql_connecter()
   sql.create_database("sql_tutorial")
   sql.use_database()
-  sql.create_table("student","student_id int primary key,student_name varchar(20),class varchar(20)")
-  sql.create_table("teacher","teacher_id int primary key,teacher_name varchar(20),major varchar(20)")
-  sql.create_table("class","class_name varchar(20) primary key,main_teacher_id int,class_major varchar(20)")
-  sql.create_table("teach","teacher_id int primary key,student_id int,class_name varchar(20)")
-  sql.create_table("book","book_name varchar(20) primary key,id int,borrow_time int")
+  sql.drop_table("student")
+  sql.drop_table("teacher")
+  sql.drop_table("class")
+  sql.drop_table("book")
+  sql.drop_table("club")
+  sql.create_table("student","student_id varchar(20) primary key,student_name varchar(20),class varchar(20),club varchar(20)")
+
+  with open("student.csv", "r") as f:
+    reader = csv.reader(f,delimiter=",")
+    for i, line in enumerate(reader):
+        if i>0:
+          str=""
+          for j in line:
+              str+="'"
+              str+=j
+              str+="'"
+              str+=","
+          str=str[:-1]
+          sql.insert_table("student",str)
+  
+  sql.create_table("teacher","teacher_id varchar(20) primary key,teacher_name varchar(20),major varchar(20)")
+  
+  with open("teacher.csv", "r") as f:
+    reader = csv.reader(f,delimiter=",")
+    for i, line in enumerate(reader):
+        if i>0:
+          str=""
+          for j in line:
+              str+="'"
+              str+=j
+              str+="'"
+              str+=","
+          str=str[:-1]
+          sql.insert_table("teacher",str)
+  sql.create_table("class","class_name varchar(20) primary key,main_teacher_id varchar(20),class_major varchar(20)")
+  with open("class.csv", "r") as f:
+    reader = csv.reader(f,delimiter=",")
+    for i, line in enumerate(reader):
+        if i>0:
+          str=""
+          for j in line:
+              str+="'"
+              str+=j
+              str+="'"
+              str+=","
+          str=str[:-1]
+          sql.insert_table("class",str)
+  sql.create_table("club","club_name varchar(20) primary key,main_teacher_id varchar(20),category varchar(20)")
+  with open("club.csv", "r") as f:
+    reader = csv.reader(f,delimiter=",")
+    for i, line in enumerate(reader):
+        if i>0:
+          str=""
+          for j in line:
+              str+="'"
+              str+=j
+              str+="'"
+              str+=","
+          str=str[:-1]
+          sql.insert_table("club",str)
+  sql.create_table("book","book_name varchar(20) primary key,id varchar(20),borrow_time varchar(20)")
+  with open("book.csv", "r") as f:
+    reader = csv.reader(f,delimiter=",")
+    for i, line in enumerate(reader):
+        if i>0:
+          str=""
+          for j in line:
+              str+="'"
+              str+=j
+              str+="'"
+              str+=","
+          str=str[:-1]
+          sql.insert_table("book",str)
   My_Tk(sql)
   sql.close()
