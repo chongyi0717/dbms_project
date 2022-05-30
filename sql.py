@@ -82,17 +82,21 @@ class sql_connecter:
                 a=True
         if(a==True):
             self.cursor.execute("insert into "+name+" values("+parameters+");")
+    
     def show(self,instruction):
         self.cursor.execute(instruction)
         records=self.cursor.fetchall()
+        fields=self.cursor.description
+        field_list=[]
+        for i in fields:
+            field_list.append(i[0])
         list=[[]]
         for r in records:
-            print(r)
             list1=[]
             for i in r:                
                 list1.append(i)
             list.append(list1)
-        return list
+        return list,field_list
     def input_commend(self,commend):
         self.cursor.execute(commend+";")
     def close(self):
@@ -100,13 +104,13 @@ class sql_connecter:
         self.connection.commit()
         self.connection.close()
 
-sql=sql_connecter()
-sql.create_database("sql_tutorial")
-sql.use_database()
-sql.create_table("student","student_id int,name varchar(20)")
-sql.drop_table("student")
-sql.drop_table("teacher")
-sql.drop_table("class")
-sql.drop_table("book")
-sql.drop_table("teach")
-sql.close()
+# sql=sql_connecter()
+# sql.create_database("sql_tutorial")
+# sql.use_database()
+# sql.create_table("student","student_id int,name varchar(20)")
+# sql.drop_table("student")
+# sql.drop_table("teacher")
+# sql.drop_table("class")
+# sql.drop_table("book")
+# sql.drop_table("teach")
+# sql.close()

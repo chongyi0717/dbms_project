@@ -1,4 +1,11 @@
-class_name,main_teacher_id,class_major
-S1C2,A489449,商科
-S2C2,A498443,商科
-S1C1,A848949,商科
+class_name,main_teacher_name,major
+S1C1,陆淑英,商科
+S1C2,宋飞,商科
+S1C3,段旭,商科
+S2S1,唐鹏,理科
+S2S2,邵成,理科
+S3C1,宋飞,商科
+S3C2,段旭,商科
+S3S1,孙丽娟,理科
+S3S2,蓝琴,理科
+S3S3,贾霞,理科

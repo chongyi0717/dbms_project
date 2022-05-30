@@ -1,4 +1,11 @@
-club_name,main_teacher_id,category
-華樂團,A489449,表演社團
-弦樂團,A498443,表演社團
-管樂團,A848949,表演社團
+club,main_teacher_name,category
+弦樂團,沈飞,康樂
+管樂團,赵龙,康樂
+華樂團,周鑫,康樂
+棋社,赵龙,學藝
+動畫社,孙桂珍,學藝
+漫畫社,郭娜,學藝
+撞球社,蓝琴,運動
+自行車社,贾霞,運動
+合唱團,伍林,康樂
+爵士社,王文,康樂

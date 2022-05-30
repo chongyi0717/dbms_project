@@ -1,0 +1,16 @@
+select * from student where class="S1C2"
+select student.student_id from book join student on book.id = student.student_id;
+delete from book where different>100
+insert into book values('jojo','None','None','None')
+update book set id='A141485',borrow_time="2022/5/30" where book_name='jojo'
+select * from student where student_id in (select id from book where different>14)
+select * from student where student_id not in (select id from book where different>14)
+select distinct class_name from class,book where exists (select * from student where student_id=id)
+select * from student where exists (select * from book where student.student_id = book.id)
+select * from student where not exists (select * from book where student.student_id = book.id)
+select id,count(book_name) from book group by id
+select sum(price) from book
+select book_name,price from book where price = (select max(price) from book)
+select book_name,price from book where price = (select min(price) from book where price !=0)
+select avg(price) from book
+select id,count(book_name) from book group by id having count(book_name)>3
